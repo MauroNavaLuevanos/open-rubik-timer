@@ -1,6 +1,6 @@
 <template lang="pug">
   div.h-100#timer
-    p#clock {{ time }}
+    p#clock {{ lastTime }}
 </template>
 
 <script>
@@ -8,7 +8,7 @@ export default {
   name: 'Timer',
   data: () => (
     {
-      time: '00'
+      lastTime: '00'
     }
   )
 }
