@@ -1,6 +1,6 @@
 <template lang="pug">
   div.h-100#timer
-    p#clock {{ time }} s
+    p#clock {{ time }}
 </template>
 
 <script>
