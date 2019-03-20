@@ -1,16 +1,16 @@
 <template lang="pug">
   div.h-100#timer
-    p#clock {{ lastTime }}
+    p#clock.my-0 {{ currentTime }}
 </template>
 
 <script>
 export default {
   name: 'Timer',
-  data: () => (
-    {
-      lastTime: '00'
+  computed: {
+    currentTime () {
+      return this.$store.state.currentTime
     }
-  )
+  }
 }
 </script>
 
@@ -20,7 +20,7 @@ export default {
   #clock {
     transform: translate(-50%, -50%);
     position: absolute;
-    font-size: 2rem;
+    font-size: 5rem;
     left: 50%;
     top: 50%;
   }

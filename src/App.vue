@@ -1,11 +1,22 @@
 <template lang="pug">
-  div#app.d-flex.flex-column
+  div#app.d-flex.flex-column(:style="`color: ${color}`")
     router-view/
+    main-menu/
 </template>
 
 <script>
+import MainMenu from '@/components/shared/MainMenu'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    'main-menu': MainMenu
+  },
+  computed: {
+    color () {
+      return this.$store.state.color
+    }
+  }
 }
 </script>
 
@@ -14,5 +25,9 @@ export default {
 
 #app {
   height: 100vh !important;
+  overflow: hidden;
+  a, p {
+    color: currentColor;
+  }
 }
 </style>
