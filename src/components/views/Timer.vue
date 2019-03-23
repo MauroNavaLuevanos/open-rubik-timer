@@ -98,11 +98,6 @@ export default {
   mounted () {
     this.generateScramble()
   },
-  computed: {
-    currentTime () {
-      return this.$store.state.currentTime
-    }
-  }
 }
 </script>
 
