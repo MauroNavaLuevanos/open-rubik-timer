@@ -1,6 +1,6 @@
 <template lang="pug">
   nav#main-menu
-    .container.row.mx-auto
+    .container.row.mx-auto.px-0
       router-link.text-center.py-3.px-0(
         to="/"
         exact
