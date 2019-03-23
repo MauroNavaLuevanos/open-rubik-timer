@@ -1,18 +1,10 @@
 <template lang="pug">
   div.h-100.d-flex.flex-column#timer
     div.d-flex.py-3.container#scramble(v-if="scramble")
-      div.d-flex.col-2.pr-3.pl-0
-        select.custom-select(
-          v-model="currentCube"
-          @change="generateScramble(currentCube)"
-        )
-          option(
-            :class="type.default ? 'selected' : null"
-            v-for="type in cubeTypes"
-            :value="type.type"
-          ) {{ type.name }}
+      div.col-2.pr-3.pl-0
+          cube-selector(@update-cube="generateScramble")/
       p.w-100.px-3.text-center {{ scramble[0] }}
-      div.pl-3
+      div.pl-3.pr-0
         button.btn.p-1#generate-scramble(@click="generateScramble()")
           refresh-ccw-icon/
     div.h-100.d-flex.align-items-center.justify-content-center.flex-column#clock
@@ -35,68 +27,38 @@ import {
   TrashIcon
 } from 'vue-feather-icons'
 
+import CubeSelector from '@/components/shared/CubeSelector'
+
+class Time {
+  constructor (time, transformedTime, cube, scramble, date) {
+    this.time = time
+    this.transformedTime = transformedTime
+    this.cube = cube
+    this.scramble = scramble
+    this.date = date
+  }
+}
+
 export default {
   name: 'Timer',
   components: {
     MessageCircleIcon,
     RefreshCcwIcon,
+    CubeSelector,
     TrashIcon
   },
   data: () => (
     {
       scramble: null,
-      currentCube: '333',
       time: 0,
       lasttime: '0:0',
-      runningTime: false,
-      cubeTypes: [
-        {
-          type: '222',
-          name: '2x2x2'
-        },
-        {
-          type: '333',
-          name: '3x3x3',
-          default: true
-        },
-        {
-          type: '444',
-          name: '4x4x4'
-        },
-        {
-          type: '555',
-          name: '5x5x5'
-        },
-        {
-          type: '666',
-          name: '6x6x6'
-        },
-        {
-          type: '777',
-          name: '7x7x7'
-        },
-        {
-          type: 'pyram',
-          name: 'Pyraminx'
-        },
-        {
-          type: 'minx',
-          name: 'Megaminx'
-        },
-        {
-          type: 'skewb',
-          name: 'Skewb'
-        },
-        {
-          type: 'sq1',
-          name: 'Square-1'
-        }
-      ]
+      runningTime: false
     }
   ),
   methods: {
     generateScramble () {
       this.scramble = new Scrambo().type(this.currentCube).get()
+      this.time = 0
     },
     startTimer () {
       this.runningTime = true
@@ -105,11 +67,19 @@ export default {
       }, 100)
     },
     stopTimer () {
+      let today = new Date()
       this.runningTime = false
       this.lasttime = this.transformedTime
-      this.$store.commit('pushTime', this.time * 100)
+      this.$store.commit('pushTime', new Time(
+        this.time * 100,
+        this.transformedTime,
+        this.currentCube,
+        this.scramble[0],
+        `${today.getFullYear()}/${today.getMonth() + 1}`
+      ))
       clearInterval(this.time)
       this.time = 0
+      this.generateScramble()
     }
   },
   mounted () {
@@ -119,6 +89,9 @@ export default {
     transformedTime () {
       let current = new Date(this.time * 100)
       return `${current.getMinutes()}:${current.getSeconds()}.${current.getMilliseconds() / 100}`
+    },
+    currentCube () {
+      return this.$store.state.currentCube
     }
   }
 }
