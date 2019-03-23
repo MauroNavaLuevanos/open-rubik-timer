@@ -22,7 +22,8 @@
           trash-icon/
         button.btn.px-3
           message-circle-icon/
-
+        button.btn.px-3 &plus;2
+        button.btn.px-3 DNF
 </template>
 
 <script>
@@ -85,7 +86,7 @@ export default {
         {
           type: 'sq1',
           name: 'Square-1'
-        },
+        }
       ]
     }
   ),
