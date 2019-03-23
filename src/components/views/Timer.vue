@@ -16,7 +16,8 @@
         button.btn.p-1#generate-scramble(@click="generateScramble()")
           refresh-ccw-icon/
     div.h-100.d-flex.align-items-center.justify-content-center.flex-column#clock
-      p.py-3.mb-0#time {{ currentTime }}
+      p.py-3.mb-0#time(v-if="!runningTime", @click="startTimer") {{ lasttime }}
+      p.py-3.mb-0#time(v-else, @click="stopTimer") {{ transformedTime }}
       div.btn-group
         button.btn.px-3
           trash-icon/
@@ -45,6 +46,9 @@ export default {
     {
       scramble: null,
       currentCube: '333',
+      time: 0,
+      lasttime: '0:0',
+      runningTime: false,
       cubeTypes: [
         {
           type: '222',
@@ -93,11 +97,30 @@ export default {
   methods: {
     generateScramble () {
       this.scramble = new Scrambo().type(this.currentCube).get()
+    },
+    startTimer () {
+      this.runningTime = true
+      setInterval(() => {
+        this.time++
+      }, 100)
+    },
+    stopTimer () {
+      this.runningTime = false
+      this.lasttime = this.transformedTime
+      this.$store.commit('pushTime', this.time * 100)
+      clearInterval(this.time)
+      this.time = 0
     }
   },
   mounted () {
     this.generateScramble()
   },
+  computed: {
+    transformedTime () {
+      let current = new Date(this.time * 100)
+      return `${current.getMinutes()}:${current.getSeconds()}.${current.getMilliseconds() / 100}`
+    }
+  }
 }
 </script>
 
