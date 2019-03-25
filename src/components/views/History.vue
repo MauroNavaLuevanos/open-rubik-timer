@@ -21,8 +21,8 @@ div.h-100#times-history
           div.d-flex.justify-content-between
             span {{ time.date }}
             button.btn.float-right.p-0
-              edit-2-icon(height="1rem")/
-          p.text-center.h3.card-title.mb-0 {{ time.transformedTime }}
+              edit-2-icon/
+          p.text-center.h3.card-title.mb-0(v-html="time.transformedTime")
 </template>
 
 <script>

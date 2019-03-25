@@ -8,8 +8,16 @@
         button.btn.p-1#generate-scramble(@click="generateScramble()")
           refresh-ccw-icon/
     div.h-100.d-flex.align-items-center.justify-content-center.flex-column#clock
-      p.py-3.mb-0#time(v-if="!runningTime", @click="startTimer") {{ lasttime }}
-      p.py-3.mb-0#time(v-else, @click="stopTimer") {{ transformedTime }}
+      p.py-3.mb-0.time(
+        v-show="!runningTime"
+        @click="switchTimer"
+        v-html="lastTime"
+      )
+      p.py-3.mb-0.time(
+        v-show="runningTime"
+        @click="switchTimer"
+        v-html="transformedTime"
+      )
       div.btn-group
         button.btn.px-3
           trash-icon/
@@ -51,7 +59,7 @@ export default {
     {
       scramble: null,
       time: 0,
-      lasttime: '0:0',
+      lastTime: '0<small>s<small>',
       runningTime: false
     }
   ),
@@ -60,35 +68,38 @@ export default {
       this.scramble = new Scrambo().type(this.currentCube).get()
       this.time = 0
     },
-    startTimer () {
-      this.runningTime = true
-      setInterval(() => {
-        this.time++
-      }, 100)
-    },
-    stopTimer () {
+    switchTimer () {
       let today = new Date()
-      this.runningTime = false
-      this.lasttime = this.transformedTime
-      this.$store.commit('pushTime', new Time(
-        this.time * 100,
-        this.transformedTime,
-        this.currentCube,
-        this.scramble[0],
-        `${today.getFullYear()}/${today.getMonth() + 1}`
-      ))
-      clearInterval(this.time)
-      this.time = 0
-      this.generateScramble()
-    }
+      if (this.runningTime) {
+        this.runningTime = false
+        this.lastTime = this.transformedTime
+        this.$store.commit('pushTime', new Time(
+          this.time * 100,
+          this.transformedTime,
+          this.currentCube,
+          this.scramble[0],
+          `${today.getFullYear()}/${today.getMonth() + 1}`
+        ))
+        this.time = 0
+        this.generateScramble()
+      } else if (!this.runningTime) {
+        this.time = 0
+        this.runningTime = true
+      }
+    },
   },
   mounted () {
+    setInterval(() => this.time++, 100)
     this.generateScramble()
   },
   computed: {
     transformedTime () {
+      let transformed = ''
       let current = new Date(this.time * 100)
-      return `${current.getMinutes()}:${current.getSeconds()}.${current.getMilliseconds() / 100}`
+      current.getMinutes() ? transformed += `${current.getMinutes()}:` : {}
+      transformed += current.getSeconds()
+      transformed += `.${current.getMilliseconds() / 100}`
+      return transformed += '<small>s</small>'
     },
     currentCube () {
       return this.$store.state.currentCube
@@ -105,8 +116,11 @@ export default {
     font-size: 1.5rem;
   }
   #clock {
-    #time {
+    .time {
+      text-align: center;
+      cursor: pointer;
       font-size: 5rem;
+      width: 100%;
     }
   }
 }
