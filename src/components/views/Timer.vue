@@ -1,19 +1,19 @@
 <template lang="pug">
   div.h-100.d-flex.flex-column#timer
-    div.d-flex.py-3.container#scramble(v-if="scramble")
-      div.col-2.pr-3.pl-0
+    div.d-flex.py-3.container.flex-wrap.flex-md-nowrap#scramble(v-if="scramble")
+      div.col-md-2.pr-3.pl-0.mb-3
           cube-selector(@update-cube="generateScramble")/
       p.w-100.px-3.text-center {{ scramble[0] }}
       div.pl-3.pr-0
         button.btn.p-1#generate-scramble(@click="generateScramble()")
           refresh-ccw-icon/
     div.h-100.d-flex.align-items-center.justify-content-center.flex-column#clock
-      p.py-3.mb-0.time(
-        v-show="!runningTime"
+      p.py-3.mb-0.time#last-time(
         @click="switchTimer"
         v-html="lastTime"
       )
-      p.py-3.mb-0.time(
+      div.py-3.mb-0.time#timing(
+        :class="runningTime ? 'active' : null"
         v-show="runningTime"
         @click="switchTimer"
         v-html="transformedTime"
@@ -86,7 +86,7 @@ export default {
         this.time = 0
         this.runningTime = true
       }
-    },
+    }
   },
   mounted () {
     setInterval(() => this.time++, 100)
@@ -96,10 +96,10 @@ export default {
     transformedTime () {
       let transformed = ''
       let current = new Date(this.time * 100)
-      current.getMinutes() ? transformed += `${current.getMinutes()}:` : {}
+      current.getMinutes() ? transformed += `${current.getMinutes()}:` : null
       transformed += current.getSeconds()
-      transformed += `.${current.getMilliseconds() / 100}`
-      return transformed += '<small>s</small>'
+      transformed += `.${current.getMilliseconds() / 100}<small>s</small>`
+      return transformed
     },
     currentCube () {
       return this.$store.state.currentCube
@@ -118,9 +118,20 @@ export default {
   #clock {
     .time {
       text-align: center;
-      cursor: pointer;
       font-size: 5rem;
+      cursor: pointer;
       width: 100%;
+      &#timing {
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        background: #fff;
+        display: flex;
+        z-index: 1000;
+        height: 100%;
+        left: 0;
+        top: 0;
+      }
     }
   }
 }

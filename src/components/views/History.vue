@@ -1,7 +1,7 @@
 <template lang="pug">
 div.h-100#times-history
-  div.container.w-100.py-3.sticky-top.bg-white.d-flex
-    div.col-2.pl-0
+  div.container.w-100.py-3.sticky-top.bg-white.d-flex.flex-wrap.flex-md-nowrap
+    div.col-md-2.pl-md-0.mb-3
       cube-selector/
     div.w-100
       input.form-control.w-100(
