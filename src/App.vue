@@ -1,16 +1,26 @@
 <template lang="pug">
   div#app.d-flex.flex-column(:style="`color: ${color}`")
+    loading/
     router-view/
     main-menu/
 </template>
 
 <script>
 import MainMenu from '@/components/shared/MainMenu'
+import Loading from '@/components/shared/Loading'
 
 export default {
   name: 'App',
   components: {
-    'main-menu': MainMenu
+    'main-menu': MainMenu,
+    Loading
+  },
+  mounted () {
+    window.onload = () => {
+      setTimeout(() => {
+        this.$store.commit('updateLoadingPage', false)
+      }, 1000)
+    }
   },
   computed: {
     color () {

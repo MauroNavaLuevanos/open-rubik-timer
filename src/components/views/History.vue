@@ -15,12 +15,27 @@ div.h-100#times-history
     div.col-12.alert.alert-info(
       v-if="!timesFilterd.length && times.length"
     ) Results with this filter not found
+    div.modal.fade#edit-time-modal(tabindex="-1", role="dialog")
+      div.modal-dialog.modal-dialog-centered(role="document")
+        div.modal-content
+          div.modal-header
+            h5.modal-title Edit Time
+            button.close(type="button", data-dismiss="modal", aria-label="Close")
+              span &times;
+          div.modal-body
+            p Modal
+          div.modal-footer.justify-content-between
+            button.btn Cancel
+            button.btn.btn-primary
+              span.text-white
+                save-icon /
+                | Save
     div.col-lg-3.col-md-4.col-6.px-1.mb-1(v-for="time in timesFilterd")
       div.card
         div.card-body
           div.d-flex.justify-content-between
             span {{ time.date }}
-            button.btn.float-right.p-0
+            button.btn.float-right.p-0(data-target="#edit-time-modal", data-toggle="modal")
               edit-2-icon/
           p.text-center.h3.card-title.mb-0(v-html="time.transformedTime")
 </template>
@@ -28,6 +43,7 @@ div.h-100#times-history
 <script>
 import {
   Edit2Icon,
+  SaveIcon,
   EyeIcon
 } from 'vue-feather-icons'
 
@@ -43,6 +59,7 @@ export default {
   components: {
     CubeSelector,
     Edit2Icon,
+    SaveIcon,
     EyeIcon
   },
   computed: {

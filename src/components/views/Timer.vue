@@ -91,11 +91,17 @@ export default {
   mounted () {
     setInterval(() => this.time++, 100)
     this.generateScramble()
+    document.body.onkeyup = function (event) {
+      if (event.keyCode === 32) {
+        alert('putos')
+      }
+    }
   },
   computed: {
     transformedTime () {
       let transformed = ''
       let current = new Date(this.time * 100)
+      // eslint-disable-next-line
       current.getMinutes() ? transformed += `${current.getMinutes()}:` : null
       transformed += current.getSeconds()
       transformed += `.${current.getMilliseconds() / 100}<small>s</small>`

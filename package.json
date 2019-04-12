@@ -15,6 +15,8 @@
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.7",
     "scrambo": "^0.3.0",
     "vue": "^2.5.2",
     "vue-feather-icons": "^4.10.0",

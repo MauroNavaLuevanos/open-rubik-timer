@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+import Bootstrap from 'bootstrap'
 import Vue from 'vue'
 
 import store from './store/store'

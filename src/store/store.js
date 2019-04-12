@@ -6,8 +6,9 @@ Vue.use(Vuex)
 let store = new Vuex.Store({
   state: {
     color: 'rgb(72, 92, 212)',
-    timesList: [],
-    currentCube: '333'
+    currentCube: '333',
+    loadingPage: true,
+    timesList: []
   },
   mutations: {
     pushTime (state, time) {
@@ -15,6 +16,9 @@ let store = new Vuex.Store({
     },
     updateCube (state, cube) {
       state.currentCube = cube
+    },
+    updateLoadingPage (state, value) {
+      state.loadingPage = value
     }
   }
 })
