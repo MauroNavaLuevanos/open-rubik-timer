@@ -38,12 +38,22 @@ import {
 import CubeSelector from '@/components/shared/CubeSelector'
 
 class Time {
-  constructor (time, transformedTime, cube, scramble, date) {
+  constructor (time, cube, scramble) {
+    const now = new Date()
+    const timeTransformed = new Date(time)
+    // NOTE: The time tke the timestamp as the id 'cause is unique
+    this.id = now.getTime()
     this.time = time
-    this.transformedTime = transformedTime
     this.cube = cube
     this.scramble = scramble
-    this.date = date
+    this.getDate = () => `${now.getFullYear()}/${now.getMonth() + 1}`
+    this.getTime = () => `
+      ${timeTransformed.getMinutes() ? `${timeTransformed.getMinutes()}:` : ''}
+      ${timeTransformed.getSeconds()}
+      .${timeTransformed.getMilliseconds() / 100}<small>s</small>
+    `
+    this.dnf = false
+    this.plus2 = false
   }
 }
 
@@ -57,10 +67,10 @@ export default {
   },
   data: () => (
     {
-      scramble: null,
-      time: 0,
       lastTime: '0<small>s<small>',
-      runningTime: false
+      runningTime: false,
+      scramble: null,
+      time: 0
     }
   ),
   methods: {
@@ -69,16 +79,13 @@ export default {
       this.time = 0
     },
     switchTimer () {
-      let today = new Date()
       if (this.runningTime) {
         this.runningTime = false
         this.lastTime = this.transformedTime
         this.$store.commit('pushTime', new Time(
           this.time * 100,
-          this.transformedTime,
           this.currentCube,
-          this.scramble[0],
-          `${today.getFullYear()}/${today.getMonth() + 1}`
+          this.scramble[0]
         ))
         this.time = 0
         this.generateScramble()

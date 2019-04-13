@@ -15,7 +15,11 @@ div.h-100#times-history
     div.col-12.alert.alert-info(
       v-if="!timesFilterd.length && times.length"
     ) Results with this filter not found
-    div.modal.fade#edit-time-modal(tabindex="-1", role="dialog")
+    div.modal.fade#edit-time-modal(
+      tabindex="-1"
+      role="dialog"
+      v-if="timeSelected"
+    )
       div.modal-dialog.modal-dialog-centered(role="document")
         div.modal-content
           div.modal-header
@@ -23,7 +27,29 @@ div.h-100#times-history
             button.close(type="button", data-dismiss="modal", aria-label="Close")
               span &times;
           div.modal-body
-            p Modal
+            div.py-3
+              tag-icon.mr-4/
+              | {{ timeSelected.id }}
+            div.py-3
+              box-icon.mr-4/
+              | {{ timeSelected.cube }}
+            div.py-3
+              refresh-ccw-icon.mr-4/
+              | {{ timeSelected.scramble }}
+            div.py-3
+              clock-icon.mr-4/
+              span(v-html="timeSelected.getTime()")
+            div.row.col-12.px-0
+              div.py3.col-md-6.px-0
+                span.mr-4 +2
+                div.custom-control.custom-switch.d-inline-block
+                  input.custom-control-input#plus2(type="checkbox")
+                  label.custom-control-label(for="plus2")
+              div.py3.col-md-6.px-0
+                span.mr-4 DNF
+                div.custom-control.custom-switch.d-inline-block
+                  input.custom-control-input#dnf(type="checkbox")
+                  label.custom-control-label(for="dnf")
           div.modal-footer.justify-content-between
             button.btn Cancel
             button.btn.btn-primary
@@ -34,17 +60,28 @@ div.h-100#times-history
       div.card
         div.card-body
           div.d-flex.justify-content-between
-            span {{ time.date }}
-            button.btn.float-right.p-0(data-target="#edit-time-modal", data-toggle="modal")
+            span {{ time.getDate() }}
+            button.btn.float-right.p-0(
+              data-target="#edit-time-modal"
+              data-toggle="modal"
+              @click="selectTime(time.id)"
+            )
               edit-2-icon/
-          p.text-center.h3.card-title.mb-0(v-html="time.transformedTime")
+          p.text-center.h3.card-title.mb-0(v-html="time.getTime()")
 </template>
 
 <script>
 import {
+  mapState
+} from 'vuex'
+import {
+  RefreshCcwIcon,
   Edit2Icon,
+  ClockIcon,
   SaveIcon,
-  EyeIcon
+  BoxIcon,
+  EyeIcon,
+  TagIcon
 } from 'vue-feather-icons'
 
 import CubeSelector from '@/components/shared/CubeSelector'
@@ -53,26 +90,37 @@ export default {
   name: 'History',
   data: () => (
     {
+      timeSelected: null,
       filter: ''
     }
   ),
   components: {
+    RefreshCcwIcon,
     CubeSelector,
+    ClockIcon,
     Edit2Icon,
+    BoxIcon,
     SaveIcon,
-    EyeIcon
+    EyeIcon,
+    TagIcon
+  },
+  methods: {
+    selectTime (id) {
+      this.timeSelected = this.times.find(time => time.id === id)
+    }
   },
   computed: {
-    times () {
-      return this.$store.state.timesList
-    },
+    ...mapState({
+      'times': 'timesList',
+      'currentCube': 'currentCube'
+    }),
     timesFilterd () {
-      let list = this.$store.state.timesList.filter(time => (
-        time.transformedTime.includes(this.filter) ||
+      let list = this.times.filter(time => (
+        time.getTime().includes(this.filter) ||
         time.scramble.toLowerCase().includes(this.filter.toLowerCase())
       ))
       let finalList = list.filter(time => (
-        time.cube === this.$store.state.currentCube
+        time.cube === this.currentCube
       ))
       return finalList
     }
