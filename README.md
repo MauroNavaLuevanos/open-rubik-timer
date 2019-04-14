@@ -1,4 +1,4 @@
-# timer
+# Simple Rubik Timer
 
 > This timer consists in a personal project oriented to speedcubing
 

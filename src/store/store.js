@@ -9,8 +9,8 @@ Vue.use(Vuex)
 
 let store = new Vuex.Store({
   state: {
-    color: 'rgb(72, 92, 212)',
     notificationsFadeTime: 5000, // milliseconds
+    color: 'rgb(72, 92, 212)',
     currentCube: '333',
     loadingPage: true,
     notifications: [],

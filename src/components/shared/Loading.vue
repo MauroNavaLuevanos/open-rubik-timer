@@ -39,8 +39,8 @@ $cube-piece-size: 2rem;
     top: 100%;
   }
   .cube {
-    animation: 1s spin infinite linear;
     width: calc(#{$cube-piece-size * 3} + 3px);
+    animation: .7s spin infinite linear;
     .cube-piece {
       box-shadow: 0 0 25px rgba(#000, .25);
       border: 1px solid currentColor;

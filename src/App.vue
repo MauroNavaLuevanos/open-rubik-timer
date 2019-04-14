@@ -7,6 +7,11 @@
 </template>
 
 <script>
+import {
+  mapMutations,
+  mapState
+} from 'vuex'
+
 import Notifications from '@/components/shared/Notifications'
 import MainMenu from '@/components/shared/MainMenu'
 import Loading from '@/components/shared/Loading'
@@ -18,18 +23,15 @@ export default {
     Notifications,
     Loading
   },
+  methods: mapMutations(['updateLoadingPage']),
   mounted () {
     window.onload = () => {
       setTimeout(() => {
-        this.$store.commit('updateLoadingPage', false)
+        this.updateLoadingPage(false)
       }, 1000)
     }
   },
-  computed: {
-    color () {
-      return this.$store.state.color
-    }
-  }
+  computed: mapState(['color'])
 }
 </script>
 
