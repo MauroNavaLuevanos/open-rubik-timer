@@ -1,11 +1,13 @@
 <template lang="pug">
   div#app.d-flex.flex-column(:style="`color: ${color}`")
     loading/
+    notifications/
     router-view/
     main-menu/
 </template>
 
 <script>
+import Notifications from '@/components/shared/Notifications'
 import MainMenu from '@/components/shared/MainMenu'
 import Loading from '@/components/shared/Loading'
 
@@ -13,6 +15,7 @@ export default {
   name: 'App',
   components: {
     'main-menu': MainMenu,
+    Notifications,
     Loading
   },
   mounted () {

@@ -34,7 +34,7 @@ $cube-piece-size: 2rem;
 .loading {
   transition: all 300ms ease;
   height: 100vh;
-  z-index: 1000;
+  z-index: 2000;
   &.loaded {
     top: 100%;
   }

@@ -19,7 +19,7 @@
         v-html="transformedTime"
       )
       div.btn-group
-        button.btn.px-3
+        button.btn.px-3(@click="deleteTime(0)")
           trash-icon/
         button.btn.px-3
           message-circle-icon/
@@ -29,6 +29,10 @@
 
 <script>
 import Scrambo from 'scrambo'
+import {
+  mapMutations,
+  mapState
+} from 'vuex'
 import {
   MessageCircleIcon,
   RefreshCcwIcon,
@@ -74,6 +78,10 @@ export default {
     }
   ),
   methods: {
+    ...mapMutations([
+      'deleteTime',
+      'pushTime'
+    ]),
     generateScramble () {
       this.scramble = new Scrambo().type(this.currentCube).get()
       this.time = 0
@@ -82,7 +90,7 @@ export default {
       if (this.runningTime) {
         this.runningTime = false
         this.lastTime = this.transformedTime
-        this.$store.commit('pushTime', new Time(
+        this.pushTime(new Time(
           this.time * 100,
           this.currentCube,
           this.scramble[0]
@@ -105,6 +113,9 @@ export default {
     }
   },
   computed: {
+    ...mapState([
+      'currentCube'
+    ]),
     transformedTime () {
       let transformed = ''
       let current = new Date(this.time * 100)
@@ -113,9 +124,6 @@ export default {
       transformed += current.getSeconds()
       transformed += `.${current.getMilliseconds() / 100}<small>s</small>`
       return transformed
-    },
-    currentCube () {
-      return this.$store.state.currentCube
     }
   }
 }

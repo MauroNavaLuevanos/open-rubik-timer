@@ -24,7 +24,11 @@ div.h-100#times-history
         div.modal-content
           div.modal-header
             h5.modal-title Edit Time
-            button.close(type="button", data-dismiss="modal", aria-label="Close")
+            button.close(
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            )
               span &times;
           div.modal-body
             div.py-3
@@ -40,22 +44,31 @@ div.h-100#times-history
               clock-icon.mr-4/
               span(v-html="timeSelected.getTime()")
             div.row.col-12.px-0
-              div.py3.col-md-6.px-0
+              div.py3.col-md-6
                 span.mr-4 +2
                 div.custom-control.custom-switch.d-inline-block
                   input.custom-control-input#plus2(type="checkbox")
                   label.custom-control-label(for="plus2")
-              div.py3.col-md-6.px-0
+              div.py3.col-md-6
                 span.mr-4 DNF
                 div.custom-control.custom-switch.d-inline-block
                   input.custom-control-input#dnf(type="checkbox")
                   label.custom-control-label(for="dnf")
           div.modal-footer.justify-content-between
-            button.btn Cancel
-            button.btn.btn-primary
-              span.text-white
-                save-icon /
-                | Save
+            button.btn(type="button", data-dismiss="modal") Cancel
+            div.row.mx-0
+              button.btn.btn-danger.mr-3(
+                type="button"
+                data-dismiss="modal"
+                @click="deleteTime(timeSelected.id)"
+              )
+                span.text-white
+                  trash-icon/
+                  | Remove
+              button.btn.btn-primary
+                span.text-white
+                  save-icon/
+                  | Save
     div.col-lg-3.col-md-4.col-6.px-1.mb-1(v-for="time in timesFilterd")
       div.card
         div.card-body
@@ -72,12 +85,14 @@ div.h-100#times-history
 
 <script>
 import {
+  mapActions,
   mapState
 } from 'vuex'
 import {
   RefreshCcwIcon,
-  Edit2Icon,
   ClockIcon,
+  Edit2Icon,
+  TrashIcon,
   SaveIcon,
   BoxIcon,
   EyeIcon,
@@ -97,22 +112,26 @@ export default {
   components: {
     RefreshCcwIcon,
     CubeSelector,
+    TrashIcon,
     ClockIcon,
     Edit2Icon,
-    BoxIcon,
     SaveIcon,
     EyeIcon,
+    BoxIcon,
     TagIcon
   },
   methods: {
+    ...mapActions({
+      deleteTime: 'onDeleteTime'
+    }),
     selectTime (id) {
       this.timeSelected = this.times.find(time => time.id === id)
     }
   },
   computed: {
     ...mapState({
-      'times': 'timesList',
-      'currentCube': 'currentCube'
+      currentCube: 'currentCube',
+      times: 'timesList'
     }),
     timesFilterd () {
       let list = this.times.filter(time => (
