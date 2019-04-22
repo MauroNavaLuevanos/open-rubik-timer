@@ -16,6 +16,7 @@
   "dependencies": {
     "@fnando/sparkline": "^0.3.10",
     "bootstrap": "^4.3.1",
+    "chartjs": "^0.3.24",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.7",
     "scrambo": "^0.3.0",
