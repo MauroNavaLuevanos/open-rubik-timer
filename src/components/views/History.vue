@@ -57,18 +57,16 @@
             div.modal-footer.justify-content-between
               button.btn(type="button", data-dismiss="modal") Cancel
               div.row.mx-0
-                button.btn.btn-danger.mr-3(
+                button.btn.btn-white.mr-3(
                   type="button"
                   data-dismiss="modal"
                   @click="deleteTime(timeSelected.id)"
                 )
-                  span.text-white
+                  span.text-danger
                     trash-icon/
-                    | Remove
-                button.btn.btn-primary
-                  span.text-white
+                button.btn.btn-white
+                  span.text-primary
                     save-icon/
-                    | Save
       div.col-lg-3.col-md-4.col-6.px-1.mb-1(v-for="time in timesFilterd")
         div.card
           div.card-body
@@ -80,7 +78,7 @@
                 @click="selectTime(time.id)"
               )
                 edit-2-icon/
-          p.text-center.h3.card-title.mb-0(v-html="time.getTime()")
+            p.text-center.h3.card-title.mb-0(v-html="time.getTime()")
 </template>
 
 <script>

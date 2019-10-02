@@ -23,8 +23,20 @@ export default {
     Notifications,
     Loading
   },
-  methods: mapMutations(['updateLoadingPage']),
+  methods: {
+    ...mapMutations([
+      'updateLoadingPage',
+      'setTimes'
+    ])
+  },
   mounted () {
+    const localTimes = window.localStorage.getItem('times')
+    if (!localTimes) {
+      window.localStorage.setItem('times', JSON.stringify([]))
+    } else {
+      this.setTimes(JSON.parse(localTimes))
+    }
+
     window.onload = () => {
       setTimeout(() => {
         this.updateLoadingPage(false)

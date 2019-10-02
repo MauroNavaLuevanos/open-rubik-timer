@@ -29,6 +29,9 @@ let store = new Vuex.Store({
     updateLoadingPage (state, value) {
       state.loadingPage = value
     },
+    setTimes (state, times) {
+      state.timesList = times
+    },
     addNotification (state, notification) {
       // NOTE: The notification structure is:
       //       {
@@ -42,6 +45,13 @@ let store = new Vuex.Store({
     }
   },
   actions: {
+    onPushTime ({commit, state}, time) {
+      commit('pushTime', time)
+      window.localStorage.setItem(
+        'times',
+        JSON.stringify(state.timesList)
+      )
+    },
     onDeleteTime ({commit, state}, id) {
       let notification = {
         type: 'danger',
@@ -54,6 +64,10 @@ let store = new Vuex.Store({
           notification.type = 'success'
           notification.message = `<strong>${id}<strong> Time was deleted`
           $('#edit-time-modal').modal('hide')
+          window.localStorage.setItem(
+            'times',
+            JSON.stringify(state.timesList)
+          )
         } else {
           notification.message = `<strong>${id}</strong> Time was not founded`
         }

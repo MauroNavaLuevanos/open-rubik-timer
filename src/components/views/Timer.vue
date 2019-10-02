@@ -31,6 +31,7 @@
 import Scrambo from 'scrambo'
 import {
   mapMutations,
+  mapActions,
   mapState
 } from 'vuex'
 import {
@@ -51,11 +52,13 @@ class Time {
     this.cube = cube
     this.scramble = scramble
     this.getDate = () => `${now.getFullYear()}/${now.getMonth() + 1}`
-    this.getTime = () => `
-      ${timeTransformed.getMinutes() ? `${timeTransformed.getMinutes()}:` : ''}
-      ${timeTransformed.getSeconds()}
-      .${timeTransformed.getMilliseconds() / 100}<small>s</small>
-    `
+    this.getTime = function () {
+      return `
+        ${timeTransformed.getMinutes() ? `${timeTransformed.getMinutes()}:` : ''}
+        ${timeTransformed.getSeconds()}
+        .${timeTransformed.getMilliseconds() / 100}<small>s</small>
+      `.trim()
+    }
     this.dnf = false
     this.plus2 = false
   }
@@ -79,9 +82,9 @@ export default {
   ),
   methods: {
     ...mapMutations([
-      'deleteTime',
-      'pushTime'
+      'deleteTime'
     ]),
+    ...mapActions(['onPushTime']),
     generateScramble () {
       this.scramble = new Scrambo().type(this.currentCube).get()
       this.time = 0
@@ -90,7 +93,7 @@ export default {
       if (this.runningTime) {
         this.runningTime = false
         this.lastTime = this.transformedTime
-        this.pushTime(new Time(
+        this.onPushTime(new Time(
           this.time * 100,
           this.currentCube,
           this.scramble[0]
@@ -98,8 +101,8 @@ export default {
         this.time = 0
         this.generateScramble()
       } else if (!this.runningTime) {
-        this.time = 0
         this.runningTime = true
+        this.time = 0
       }
     }
   },
